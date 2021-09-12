@@ -5,7 +5,6 @@ library(dygraphs)
 library(xts)
 library(leaflet)
 
-
 url <- "http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"
 data <- read.csv(url)
 map <- readOGR("./data/health_area/HA_2018.shp")
