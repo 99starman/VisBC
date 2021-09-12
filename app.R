@@ -27,7 +27,7 @@ currDate <- dplyr::last(total_data$Date)
 
 # ui
 ui <- fluidPage(
-  titlePanel(p("VisBC For Covid-19", style = "color:#3474A7")),
+  titlePanel("VisBC For Covid-19"),
   sidebarLayout(
     sidebarPanel(
       sliderInput("date",
