@@ -5,6 +5,7 @@ library(dygraphs)
 library(xts)
 library(leaflet)
 
+
 url <- "http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"
 data <- read.csv(url)
 map <- readOGR("./data/health_area/HA_2018.shp")
@@ -26,25 +27,45 @@ currDate <- dplyr::last(total_data$Date)
 
 # ui
 ui <- fluidPage(
+  
   titlePanel("VisBC For Covid-19"),
   sidebarLayout(
     sidebarPanel(
+      tags$style(type="text/css", "
+           #loadmessage {
+             position: fixed;
+             top: 0px;
+             left: 0px;
+             width: 100%;
+             padding: 5px 0px 5px 0px;
+             text-align: center;
+             font-weight: bold;
+             font-size: 100%;
+             color: #000000;
+             background-color: #fffa66;
+             z-index: 105;
+           }
+      "),
       sliderInput("date",
                   "Date:",
                   min = as.Date("2020-01-29","%Y-%m-%d"),
                   max = as.Date(currDate),
-                  value=as.Date("2020-01-29"),
+                  value=as.Date(currDate),
                   timeFormat="%Y-%m-%d"),
       p("Made with", a("Shiny", href = "http://shiny.rstudio.com"), "."),
       img(
         src = "imageShiny.png",
         width = "50px", height = "50px"
-      )
+      ),
+      conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+                       tags$div("Loading data...",id="loadmessage"))
     ),
     mainPanel(
+      id = "main_content",
       leafletOutput(outputId = "map"),
       fluidRow(dygraphOutput(outputId = "timetrend", height=400, width=600),
-               style = "padding-top:50px")
+                   style = "padding-top:50px")         
+
     )
   )
 )
